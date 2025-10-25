@@ -97,6 +97,30 @@ export class NotificationMeta extends Schema.Struct({
 }) {}
 
 /**
+ * @since 1.0.0
+ * @category Common
+ */
+export class ToolMeta extends Schema.Struct({
+  /**
+   * This parameter name is reserved by MCP to allow clients and servers to
+   * attach additional metadata to their tools.
+   */
+  _meta: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
+}) {}
+
+/**
+ * @since 1.0.0
+ * @category Common
+ */
+export class ResourceMeta extends Schema.Struct({
+  /**
+   * This parameter name is reserved by MCP to allow clients and servers to
+   * attach additional metadata to their resources.
+   */
+  _meta: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
+}) {}
+
+/**
  * An opaque token used to represent a cursor for pagination.
  *
  * @since 1.0.0
@@ -546,6 +570,7 @@ export class ProgressNotification extends Rpc.make("notifications/progress", {
 export class Resource extends Schema.Class<Resource>(
   "@effect/ai/McpSchema/Resource"
 )({
+  ...ResourceMeta.fields,
   /**
    * The URI of this resource.
    */
@@ -1137,6 +1162,7 @@ export class ToolAnnotations extends Schema.Class<ToolAnnotations>(
 export class Tool extends Schema.Class<Tool>(
   "@effect/ai/McpSchema/Tool"
 )({
+  ...ToolMeta.fields,
   /**
    * The name of the tool.
    */

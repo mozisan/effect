@@ -36,6 +36,7 @@ import type {
   PromptArgument,
   PromptMessage,
   ReadResourceResult,
+  ResourceMeta,
   ServerCapabilities
 } from "./McpSchema.js"
 import {
@@ -678,7 +679,8 @@ export const registerToolkit: <Tools extends Record<string, AiTool.Any>>(
         destructiveHint: Context.get(tool.annotations, AiTool.Destructive),
         idempotentHint: Context.get(tool.annotations, AiTool.Idempotent),
         openWorldHint: Context.get(tool.annotations, AiTool.OpenWorld)
-      })
+      }),
+      _meta: tool._meta
     })
     yield* registry.addTool({
       tool: mcpTool,
@@ -783,6 +785,7 @@ export const registerResource: {
       E,
       R
     >
+    readonly _meta?: typeof ResourceMeta.Type._meta | undefined
   }): Effect.Effect<void, never, Exclude<R, McpServerClient> | McpServer>
   <const Schemas extends ReadonlyArray<Schema.Schema.Any>>(
     segments: TemplateStringsArray,
@@ -815,6 +818,7 @@ export const registerResource: {
       E,
       R
     >
+    readonly _meta?: typeof ResourceMeta.Type._meta | undefined
   }) => Effect.Effect<
     void,
     never,
@@ -877,6 +881,7 @@ export const registerResource: {
       E,
       R
     >
+    readonly _meta?: typeof ResourceMeta.Type._meta | undefined
   }) {
     const context = yield* Effect.context<any>()
     const registry = yield* McpServer
@@ -956,6 +961,7 @@ export const resource: {
       E,
       R
     >
+    readonly _meta?: typeof ResourceMeta.Type._meta | undefined
   }): Layer.Layer<never, never, Exclude<R, McpServerClient>>
   <const Schemas extends ReadonlyArray<Schema.Schema.Any>>(
     segments: TemplateStringsArray,
@@ -988,6 +994,7 @@ export const resource: {
       E,
       R
     >
+    readonly _meta?: typeof ResourceMeta.Type._meta | undefined
   }) => Layer.Layer<
     never,
     never,

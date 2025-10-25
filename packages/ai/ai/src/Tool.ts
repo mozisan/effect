@@ -38,6 +38,7 @@ import * as Schema from "effect/Schema"
 import * as AST from "effect/SchemaAST"
 import type { Covariant } from "effect/Types"
 import type * as AiError from "./AiError.js"
+import type { ToolMeta } from "./McpSchema.js"
 
 // =============================================================================
 // Type Ids
@@ -169,6 +170,11 @@ export interface Tool<
    * about the tool.
    */
   readonly annotations: Context.Context<never>
+
+  /**
+   * The optional metadata of the tool.
+   */
+  readonly _meta?: typeof ToolMeta.Type._meta | undefined
 
   /**
    * Adds a _request-level_ dependency which must be provided before the tool
@@ -498,6 +504,7 @@ export interface Any extends Pipeable {
   readonly failureSchema: Schema.Schema.All
   readonly failureMode: FailureMode
   readonly annotations: Context.Context<never>
+  readonly _meta?: typeof ToolMeta.Type._meta | undefined
 }
 
 /**
@@ -870,6 +877,7 @@ const userDefinedProto = <
   readonly failureSchema: Failure
   readonly annotations: Context.Context<never>
   readonly failureMode: Mode
+  readonly _meta?: typeof ToolMeta.Type._meta | undefined
 }): Tool<
   Name,
   {
@@ -983,6 +991,10 @@ export const make = <
      * Service dependencies required by the tool handler.
      */
     readonly dependencies?: Dependencies | undefined
+    /**
+     * The optional metadata of the tool.
+     */
+    readonly _meta?: typeof ToolMeta.Type._meta | undefined
   }
 ): Tool<
   Name,
@@ -1005,7 +1017,8 @@ export const make = <
     successSchema,
     failureSchema,
     failureMode: options?.failureMode ?? "error",
-    annotations: Context.empty()
+    annotations: Context.empty(),
+    _meta: options?._meta
   }) as any
 }
 
