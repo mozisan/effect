@@ -498,5 +498,23 @@ describe("Tool", () => {
           "Failed to decode tool call parameters for tool 'HandlerRequired' from:\n'{}'"
         )
       }))
+
+    it("should allow provider-defined tools to carry _meta", () => {
+      const meta = { capability: "provider-meta" } as const
+      const ProviderWithMeta = Tool.providerDefined({
+        id: "provider.with_meta",
+        toolkitName: "ProviderWithMeta",
+        providerName: "provider_with_meta",
+        args: {},
+        parameters: {},
+        success: Schema.Struct({ ok: Schema.Boolean }),
+        failure: Schema.Never,
+        _meta: meta
+      })
+
+      const tool = ProviderWithMeta({})
+
+      assert.deepStrictEqual(tool._meta, meta)
+    })
   })
 })

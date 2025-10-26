@@ -616,6 +616,7 @@ export class Resource extends Schema.Class<Resource>(
 export class ResourceTemplate extends Schema.Class<ResourceTemplate>(
   "@effect/ai/McpSchema/ResourceTemplate"
 )({
+  ...ResourceMeta.fields,
   /**
    * A URI template (according to RFC 6570) that can be used to construct
    * resource URIs.

@@ -911,6 +911,7 @@ const providerDefinedProto = <
   readonly successSchema: Success
   readonly failureSchema: Failure
   readonly failureMode: FailureMode
+  readonly _meta?: typeof ToolMeta.Type._meta | undefined
 }): ProviderDefined<
   Name,
   {
@@ -1096,6 +1097,10 @@ export const providerDefined = <
    * Schema for failed tool execution results.
    */
   readonly failure?: Failure | undefined
+  /**
+   * Optional metadata forwarded to the MCP tool `_meta` field.
+   */
+  readonly _meta?: typeof ToolMeta.Type._meta | undefined
 }) =>
 <Mode extends FailureMode | undefined = undefined>(
   args: RequiresHandler extends true ? Schema.Simplify<
@@ -1140,7 +1145,8 @@ export const providerDefined = <
       : constEmptyStruct,
     successSchema,
     failureSchema,
-    failureMode: failureMode ?? "error"
+    failureMode: failureMode ?? "error",
+    _meta: options?._meta
   }) as any
 }
 
